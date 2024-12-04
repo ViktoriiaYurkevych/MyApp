@@ -1,0 +1,94 @@
+﻿<div class="hidden lg:p-20" id="create-story" uk-modal="">
+    <div class="uk-modal-dialog -bottom-1 relative overflow-hidden mx-auto bg-white p-7 shadow-xl rounded-lg md:w-[520px]mw-full">
+        <div class="text-center py-3 border-b -m-7 mb-0 dark:border-state-700">
+            <h2 class="text-sm font-medium">Create Story</h2>
+            <button type="button" class="button__ico absolute top-0 right-0 m-2.5 uk-modal-close">
+                <svg fill="#000000" width="800px" height="800px" viewBox="0 0 24 24" id="cross" data-name="Line Color"
+                     xmlns="http://www.w3.org/2000/svg" class="icon line-color">
+                    <line x1="19" y1="19" x2="5" y2="5" style="stroke: rgb(0, 0, 0); stroke-linecap: round; stroke-width: 2;"></line>
+                    <line x1="19" y1="5" x2="5" y2="19" style="stroke: rgb(0, 0, 0); stroke-linecap: round; stroke-width: 2;"></line>
+                </svg>
+            </button>
+        </div>
+        <div class="space-y-5 mt-7">
+            <form id="storyUploadForm">
+                <div class="w-full h-72 relative border1 rounded-lg overflow-hidden bg-[url('../images/ad_pattern.png')] bg-repeat">
+                    <label class="flex flex-col justify-center items-center absolute -translate-x-1/2 left-1/2 bottom-0 z-10 w-full pb-6 pt-10 cursor-pointer bg-gradient-to-t from-gray-700/60">
+                        <input id="createStatusUrl" name="uploadedContent" type="file" accept="image/png, image/jpeg" />
+                        <ion-icon name="image" class="text-3xl text-teal-600"></ion-icon>
+                        <span class="text-white mt-2">Browse to Upload image</span>
+                    </label>
+                </div>
+                <div class="flex justify-between items-center">
+                    <div class="flex items-start gap-2">
+                        <ion-icon name="time-outline" class="text-3xl text-teal-600 rounded-full bg-blue-50"></ion-icon>
+                        <p class="text-sm text-gray-500 font-medium">
+                            Your Status will be available <br /> for
+                            <span class="text-gray-800">24 Hours</span>
+                        </p>
+                    </div>
+                    <button type="button" onclick="uploadStory()" class="button bg-blue-500 text-white px-8">Create</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    document.getElementById('storyUploadBtn').addEventListener('click', () => {
+        document.getElementById('storyUpload').click();
+    });
+
+    document.getElementById('storyUpload').addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        const storyPreview = document.getElementById('storyPreview');
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                storyPreview.src = e.target.result;
+            }
+            reader.readAsDataURL(file);
+        } else {
+            storyPreview.src = "";
+        }
+    });
+</script>
+
+@*<script>
+    function uploadStory() {
+        var formData = new FormData(document.getElementById("storyUploadForm"));
+
+        fetch('/Home/UploadStory', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Dodaj nowe zdjęcie do listy historii
+                    const storiesContainer = document.querySelector(".uk-slider-items");
+
+                    const newStory = document.createElement("li");
+                    newStory.classList.add("md:pr-3", "pr-2", "hover:scale-[1.15]", "hover:-rotate-2", "duration-300");
+                    newStory.innerHTML = `
+                        <a href="${data.imageUrl}" uk-lightbox>
+                            <div class="md:w-16 md:h-16 w-12 h-12 relative md:border-4 border-2 shadow border-white rounded-full overflow-hidden">
+                                <img src="${data.imageUrl}" />
+                            </div>
+                        </a>
+                    `;
+                    storiesContainer.appendChild(newStory);
+
+                    // Zamknij okno modalne po zakończeniu
+                    UIkit.modal("#create-story").hide();
+                } else {
+                    alert("Ошибка при загрузке изображения. Попробуйте снова.");
+                }
+            })
+            .catch(error => {
+                console.error("Ошибка:", error);
+            });
+    }
+
+*@</script>
+
