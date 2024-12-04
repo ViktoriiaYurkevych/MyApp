@@ -1,0 +1,112 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@using MyApp.Data.Models;
+@using System.Security.Claims;
+@using MyApp.Extensions;
+@inject SignInManager<AplicationUser> signInManager;
+@inject UserManager<AplicationUser> userManager;
+
+@{
+    bool isSignedIn = signInManager.IsSignedIn(User);
+    
+    string userName = isSignedIn ? ((ClaimsIdentity)User.Identity).GetUserName() : string.Empty;
+ }
+
+
+<header class="z-[100] fixed top-0 left-0 w-full flex items-center bg-white/80 bg-sky-50 backdrop-blur-xl border-b border-state-200 h-[--m-top]">
+    <div class="flex items-center justify-between w-full px-4">
+        <div class="flex items-center gap-1">
+            <button uk-toggle="target: #site__sidebar ; cls: !-translate-x-0" class="w-8 h-8 text-xl rounded-full hover:bg-gray-100 xl:hidden group">
+                <ion-icon name="menu-outline" class="text-2xl group-aria-expanded:hidden"></ion-icon>
+                <ion-icon name="close-outline" class="hidden text-2xl group-aria-expanded:block"></ion-icon>
+            </button>
+            <div id="logo1" class="flex items-center">
+                <a href="#" class="flex items-center">
+                    <img src="~/images/logo1.png" class="w-10 hidden md:block" />
+                    <span class="ml-2">MyApp</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="relative flex-1 max-w-[680px] mx-auto">
+            <form id="search--box" class="flex items-center rounded-xl overflow-hidden bg-white/90 shadow">
+                <ion-icon name="search" class="ml-4 text-lg text-gray-500"></ion-icon>
+                <input type="text" name="query" placeholder="Search Posts, Friends..:)" class="w-full h-10 pl-2 pr-4 bg-transparent text-sm text-gray-800 placeholder-gray-500" />
+            </form>
+        </div>
+
+        <div class="flex items-center gap-4">
+            <!-- Notification icon with dropdown -->
+            <div class="relative">
+                <button type="button" class="p-2 rounded-full bg-secondery">
+                    <ion-icon name="notifications-outline" class="text-2xl text-gray-700"></ion-icon>
+                    <span class="absolute top-0 right-0 bg-red-600 text-white text-xs rounded-full px-1" id="notificationsCount">3</span>
+                </button>
+                <div class="hidden bg-white rounded-lg shadow-xl mt-2 w-64 p-4" uk-drop="pos: bottom-right; mode: click; offset: 10">
+                    <h3 class="font-semibold text-lg">Notifications</h3>
+                    <div class="mt-2 text-sm text-gray-600">
+                        No notifications...
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile icon with dropdown -->
+            <div class="relative">
+                <button class="rounded-full bg-secondery p-1 cursor-pointer">
+                    <img src="~/images/avatar/user.png"class="w-9 h-9 rounded-full shadow" />
+                </button>
+                <div class="hidden bg-white rounded-lg shadow-xl mt-2 w-48 p-4" uk-drop="pos: bottom-right; mode: click; offset: 10">
+                   @* <a href="#" class="flex items-center gap-3">
+                        <img src="~/images/avatar/user.png" class="w-10 h-10 rounded-full shadow" />
+                        <div>
+                            <h4 class="font-medium text-black">Viktoriia Yurkevych</h4>
+                            <p class="text-blue-600 text-sm">viktoriiayurkevych</p>
+                        </div>
+                    </a>
+                    <hr />
+                    <nav>
+                        <a>
+                            <div class="flex items-center gap-2.5 hover:bg-secondery p-2 px-2.5 rounded-md ">
+                                <ion-icon name="settings-outline" class="text-lg"></ion-icon> My Account
+                            </div>
+                        </a>*@
+
+                        <hr />
+                        <a>
+                        
+
+
+                        @if (signInManager.IsSignedIn(User))
+                            {
+                                @userName
+                                <div class="flex items-center gap-2.5 hover:bg-secondery p-2 px-2.5 rounded-md">
+                                <form asp-controller="Account" asp-action="Logout" method="post">
+                                        <button type="submit" class="nav-link text-dark" >
+                                            <ion-icon name="exit-outline" class="text-lg"></ion-icon> Logout
+                                        </button>
+                                    </form>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="flex items-center gap-2.5 hover:bg-secondery p-2 px-2.5 rounded-md">
+                                    <a class="nav-link text-dark" asp-controller="Account" asp-action="Login">
+                                        <ion-icon name="person-add-outline" class="text-lg"></ion-icon> Login
+                                    </a>
+                                </div>
+
+                                <div class="flex items-center gap-2.5 hover:bg-secondery p-2 px-2.5 rounded-md">
+                                    <a class="nav-link text-dark" asp-controller="Account" asp-action="Register">
+                                        <ion-icon name="person-add-outline" class="text-lg"></ion-icon> Register
+                                    </a>
+                                </div>
+                            }
+                        </ul>
+                 
+                        </a>
+
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
